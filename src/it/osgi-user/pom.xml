@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>junit</groupId>
+    <artifactId>osgi-user</artifactId>
+    <version>1.0</version>
+    <packaging>bundle</packaging>
+
+    <name>OSGi User</name>
+    <url>http://junit.org</url>
+    <description>OSGi user module for JUnit integration tests</description>
+    <organization>
+        <name>JUnit</name>
+        <url>http://www.junit.org</url>
+    </organization>
+    <inceptionYear>2012</inceptionYear>
+    <dependencies>
+		<dependency>
+			<!-- javac 1.5 and embedded in org.apache.felix:org.apache.felix.framework:4.0.3 -->
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<version>4.3.0</version>
+			<scope>provided</scope>
+		</dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.3.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Name>${project.name}</Bundle-Name>
+						<Bundle-Description>${project.description}</Bundle-Description>
+						<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+						<Bundle-DocURL>${project.organization.url}</Bundle-DocURL>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <Export-Package>org.junit.osgi.user.*;version="${project.version}"</Export-Package>
+                        <Bundle-Description>${project.description}</Bundle-Description>
+                        <Bundle-License>Common Public License Version 1.0</Bundle-License>
+						<Import-Package>org.osgi.framework.*;version="[1.6,2.0)";resolution:=optional</Import-Package>
+                        <Bundle-Activator>org.junit.osgi.user.activator.OSGiUserActivator</Bundle-Activator>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

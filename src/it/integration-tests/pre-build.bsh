@@ -1,0 +1,49 @@
+import java.io.*;
+import java.util.*;
+
+print("pre-build.bsh: Preparing Integration-Tests BOM.");
+
+Properties properties= new Properties();
+File testProp= new File(basedir, "test.properties");
+FileReader testPropReader= new FileReader(testProp);
+properties.load(testPropReader);
+testPropReader.close();
+
+String slash= File.separator;
+
+String itBasedir= basedir.getCanonicalPath();
+print("[INFO] integration tests: it.project.basedir: " + itBasedir);
+properties.setProperty("it.project.basedir", itBasedir);
+
+File buildDirectory= new File(basedir, "target");
+String itBuildDirectory= buildDirectory.getCanonicalPath();
+print("[INFO] integration test: it.project.build.directory: " + itBuildDirectory);
+properties.setProperty("it.project.build.directory", itBuildDirectory);
+
+File outputDirectory= new File(itBuildDirectory, "classes");
+String itOutputDirectory= outputDirectory.getCanonicalPath();
+print("[INFO] integration test: it.project.build.outputDirectory: " + itOutputDirectory);
+properties.setProperty("it.project.build.outputDirectory", itOutputDirectory);
+
+String itLocalRepositoryPath= localRepositoryPath.getCanonicalPath();
+print("[INFO] local repository path used in integration tests: " + itLocalRepositoryPath);
+properties.setProperty("it.localRepositoryPath", itLocalRepositoryPath);
+
+FileWriter testPropWriter= new FileWriter(testProp, false);
+properties.store(testPropWriter, "Generated system properties referring to project's attributes for the use in the integration tests.");
+testPropWriter.close();
+
+String groupId= properties.getProperty("it.project.groupId");
+String artifactId= properties.getProperty("it.project.artifactId");
+String version= properties.getProperty("it.project.version");
+String artifactRelativePath= groupId + slash + artifactId + slash + version;
+File artifactPath= new File(localRepositoryPath, artifactRelativePath);
+if (!artifactPath.isDirectory()) {
+	throw new Exception("[ERROR] artifact's path in local repository "
+						+ artifactPath.getCanonicalPath() 
+						+ " is not an existing directory.");
+}
+print("[INFO] deleting " + groupId + ":" + artifactId + ":" + version + " in local repo " + localRepositoryPath.getCanonicalPath());
+artifactPath.delete();
+
+print("pre-build.bsh: EOF");

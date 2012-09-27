@@ -1,0 +1,28 @@
+import java.io.*;
+import java.util.*;
+
+print("build-selector.bsh: Checking Integration-Tests BOM.");
+
+File testProp= new File(basedir, "test.properties");
+if (testProp.isFile()) print("[INFO] loading " + testProp.getCanonicalPath());
+else throw new Exception("[ERROR] " + testProp.getCanonicalPath() + " does not exist.");
+FileReader testPropReader= new FileReader(testProp);
+Properties properties= new Properties();
+properties.load(testPropReader);
+testPropReader.close();
+
+String groupId= properties.getProperty("it.project.groupId");
+if (groupId == null) throw new Exception("[ERROR] loaded groupId unspecified.");
+else print("[INFO] loaded groupId " + groupId);
+
+String artifactId= properties.getProperty("it.project.artifactId");
+if (artifactId == null) throw new Exception("[ERROR] loaded artifactId unspecified.");
+else print("[INFO] loaded artifactId " + artifactId);
+
+String version= properties.getProperty("it.project.version");
+if (version == null) throw new Exception("[ERROR] loaded version unspecified.");
+else print("[INFO] loaded version " + version);
+
+print("build-selector.bsh: EOF");
+
+"junit".equals(groupId) && "junit".equals(artifactId)
